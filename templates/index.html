@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://rawgit.com/js-cookie/js-cookie/master/src/js.cookie.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="static/popup.css" />
+    <script type=text/javascript>
+        $(document).ready(function() {
+            var cookieVal = Cookies.get('authcode');
+            if (cookieVal == null) {
+                // $(location).attr('href', '/#auth')
+                // for now, do nothing
+            } else {
+                // do nothing, pass through to page
+                // Cookies.set('authcode', '40392');
+            }
+        });
+    </script>
+    <script type=text/javascript>
+        $(function() {
+            $('button#request').bind('click', function() {
+                $.get('/request_code');
+            });
+        });
+    </script>
+    <script type=text/javascript>
+        $(function() {
+            $('a#calculate').bind('click', function() {
+                $.getJSON('/_update_server', {
+                    name: $('input[name="name"]').val(),
+                    aboutme_001: $('input[name="aboutme_001"]').val(),
+                    aboutme_002: $('input[name="aboutme_002"]').val(),
+                    aboutme_003: $('input[name="aboutme_003"]').val(),
+                    goals_001: $('input[name="goals_001"]').val(),
+                    goals_002: $('input[name="goals_002"]').val(),
+                    goals_003: $('input[name="goals_003"]').val()
+                });
+                return false;
+            });
+            $("#sent").fadeIn(20).fadeOut(100);
+        });
+    </script>
+</head>
+<body>
+
+<div id="auth" class="overlay">
+    <div class="popup">
+        <h2>Authorize</h2>
+        <div class="content">
+            <a class="button" id="request">Request Code</a>
+            Please enter code shown on AboutMe board.
+            <form>
+                <input id="code" type="number" />
+            </form>
+            <br/>
+            <a class="button" href="#auth">Authorize</a>
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header">
+        <h3 class="text-muted">About Me</h3>
+    </div>
+    <hr/>
+    <div id="sent">Data Sent</div>
+    <div>
+        <p>
+            Please call me:</br>
+            <input type="text" size="30" name="name"></br>
+            About me:
+        <ul>
+            <li>
+                <input type="text" size="30" name="aboutme_001"></br>
+            </li>
+            <li>
+                <input type="text" size="30" name="aboutme_002"></br>
+            </li>
+            <li>
+                <input type="text" size="30" name="aboutme_003"></br>
+            </li>
+        </ul><br/>
+        My goals:
+        <ul>
+            <li>
+                <input type="text" size="30" name="goals_001"></br>
+            </li>
+            <li>
+                <input type="text" size="30" name="goals_002"></br>
+            </li>
+            <li>
+                <input type="text" size="30" name="goals_003"></br>
+            </li>
+        </ul><br/>
+        <p><a href="javascript:void();" id="calculate">update board</a>
+            </form>
+    </div>
+</div>
+
+<img class="img-circle" src="static/file_001.png" width="50">
+<form action="upload_001" method="post" enctype="multipart/form-data">
+    <input type="file" name="file"><br /><br />
+    <input type="submit" value="Upload top image">
+</form>
+<img class="img-circle" src="static/file_002.png" width="50">
+<form action="upload_002" method="post" enctype="multipart/form-data">
+    <input type="file" name="file"><br /><br />
+    <input type="submit" value="Upload middle image">
+</form>
+<img class="img-circle" src="static/file_003.png" width="50">
+<form action="upload_003" method="post" enctype="multipart/form-data">
+    <input type="file" name="file"><br /><br />
+    <input type="submit" value="Upload bottom image">
+</form>
+<!--
+<div class="box">
+    <a class="button" href="#auth">Let me Pop up</a>
+</div>
+-->
+
+</body>
+</html>
