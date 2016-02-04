@@ -16,16 +16,31 @@ from werkzeug import secure_filename
 import os
 from time import sleep
 import json
+from flask import g
+import sqlite3
 import random
 
 UPLOAD_FOLDER = 'static'
 ALLOWED_EXTENSIONS = set(['png'])
-DATAFILE = 'vals.json'
+DATAFILE = 'vals.db'
 
 # Initialize the Flask application
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.debug = True
+
+@app.before_request
+def before_request():
+    g.db = sqlite3.connect(DATAFILE)
+    cursor = g.db.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS aboutme_vals 
+        (name TEXT, goals_001 TEXT, goals_002 TEXT, goals_003 TEXT,
+            aboutme_001 TEXT, aboutme_002 TEXT, aboutme_003 TEXT, auth_code TEXT)''')    
+
+@app.teardown_request
+def teardown_request(exception):
+    if hasattr(g, 'db'):
+        g.db.close()
 
 def nocache(view):
     @wraps(view)
@@ -44,19 +59,16 @@ def nocache(view):
 # jQuery is loaded to execute the request and update the
 # value of the operation
 @app.route('/vals')
-def vals():
+def vals():    
     myvals = {"a": "100"}
     return json.dumps(myvals)
 
 @app.route('/patient_info')
 def patient_info():
-    try:
-        with open(DATAFILE, "r") as f:
-            vals = f.read()
-    except:
-        import pdb; pdb.set_trace()
-
-    return vals
+    cursor = g.db.cursor()    
+    cursor.execute('''SELECT * FROM aboutme_vals''' );    
+    g.db.commit()
+    return json.dumps(cursor.fetchone())
 
 @app.route('/')
 @nocache
@@ -72,17 +84,17 @@ def update_code(auth_code):
     """
     modify datastore, return code
     """
-    with open(DATAFILE, "r") as f:
-        vals = json.loads(f.read())
-    vals['values']['auth_code'] = auth_code
-    with open(DATAFILE, "w") as f:
-        f.write(json.dumps(vals))
+    cursor = g.db.cursor()
+    cursor.execute('''UPDATE aboutme_vals SET auth_code = (?)''', (auth_code,) )
+    g.db.commit()
     return auth_code
 
-def read_code():
-    with open(DATAFILE, "r") as f:
-        vals = json.loads(f.read())
-    return vals['values']['auth_code']
+def read_code():    
+    cursor = g.db.cursor()
+    cursor.execute('''SELECT auth_code FROM aboutme_vals''' )
+    row = cursor.fetchone()
+    g.db.commit()    
+    return row[0]
 
 @app.route('/clear_code')
 def clear_code():
@@ -100,31 +112,16 @@ def request_code():
 
 @app.route('/_update_server')
 def update_server():
-    name = request.args.get('name', 0, type=str)
-    aboutme_001 = request.args.get('aboutme_001', 0, type=str)
-    aboutme_002 = request.args.get('aboutme_002', 0, type=str)
-    aboutme_003 = request.args.get('aboutme_003', 0, type=str)
-    goals_001 = request.args.get('goals_001', 0, type=str)
-    goals_002 = request.args.get('goals_002', 0, type=str)
-    goals_003 = request.args.get('goals_003', 0, type=str)
-    values = {'values':
-                  {'name': name,
-                   'aboutme_001': aboutme_001,
-                   'aboutme_002': aboutme_002,
-                   'aboutme_003': aboutme_003,
-                   'goals_001': goals_001,
-                   'goals_002': goals_002,
-                   'goals_003': goals_003,
-                   'auth_code': read_code(),
-                   }}
-    try:
-        with open(DATAFILE, "w") as f:
-            f.write(json.dumps(values))
-    except:
-        import pdb; pdb.set_trace()
 
-    finally:
-        return jsonify(result='success')
+    cursor = g.db.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS aboutme_vals 
+        (name TEXT, goals_001 TEXT, goals_002 TEXT, goals_003 TEXT,
+            aboutme_001 TEXT, aboutme_002 TEXT, aboutme_003 TEXT, auth_code TEXT)''')    
+    cursor.execute('''UPDATE aboutme_vals 
+        SET name = (?), goals_001 = (?), goals_002 = (?), goals_003 = (?), aboutme_001 = (?), aboutme_002 = (?), aboutme_003 = (?), auth_code = (?)''', 
+        ( '', '', '', '', '', '', '', read_code(),) )
+    g.db.commit()
+    return jsonify(result='success')
 
 def allowed_file(filename):
     return '.' in filename and \
