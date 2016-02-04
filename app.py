@@ -65,7 +65,7 @@ def patient_info():
         g.db.close()
     except:
         import pdb; pdb.set_trace()
-    return render_template('patient_info.json',vals=vals)
+    return jsonify(vals=vals)
 
 @app.route('/')
 @nocache
