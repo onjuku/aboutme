@@ -17,15 +17,22 @@ import os
 from time import sleep
 import json
 import random
+import sqlite3
+from flask import g
 
 UPLOAD_FOLDER = 'static'
 ALLOWED_EXTENSIONS = set(['png'])
 DATAFILE = 'vals.json'
+DATABASE = 'database/storage.db'
 
 # Initialize the Flask application
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.debug = True
+
+# Database connection
+def connect_db():
+    return sqlite3.connect(DATABASE)
 
 def nocache(view):
     @wraps(view)
@@ -50,13 +57,15 @@ def vals():
 
 @app.route('/patient_info')
 def patient_info():
+    query = 'SELECT * FROM vals'
     try:
-        with open(DATAFILE, "r") as f:
-            vals = f.read()
+        g.db = connect_db()
+        cur = g.db.execute(query)
+        vals = cur.fetchone()
+        g.db.close()
     except:
         import pdb; pdb.set_trace()
-
-    return vals
+    return jsonify(vals=vals)
 
 @app.route('/')
 @nocache
@@ -107,24 +116,22 @@ def update_server():
     goals_001 = request.args.get('goals_001', 0, type=str)
     goals_002 = request.args.get('goals_002', 0, type=str)
     goals_003 = request.args.get('goals_003', 0, type=str)
-    values = {'values':
-                  {'name': name,
-                   'aboutme_001': aboutme_001,
-                   'aboutme_002': aboutme_002,
-                   'aboutme_003': aboutme_003,
-                   'goals_001': goals_001,
-                   'goals_002': goals_002,
-                   'goals_003': goals_003,
-                   'auth_code': read_code(),
-                   }}
+    auth_code = 'the auth code here'
+    row_values = (name,aboutme_001,aboutme_002,aboutme_003,
+                  goals_001,goals_002,goals_003,'auth code value')
+    query = 'UPDATE vals SET name = ?, aboutme_001 = ?, aboutme_002 = ?, \
+                             aboutme_003 = ?, goals_001 = ?, goals_002 = ?, \
+                             goals_003 = ?, auth_code = ?  \
+                         WHERE 1'
     try:
-        with open(DATAFILE, "w") as f:
-            f.write(json.dumps(values))
+        g.db = connect_db()
+        cur = g.db.execute(query,row_values)
+        g.db.commit()
+        g.db.close()
     except:
         import pdb; pdb.set_trace()
-
     finally:
-        return jsonify(result='success')
+        return 'success'    
 
 def allowed_file(filename):
     return '.' in filename and \
