@@ -59,9 +59,8 @@ margin-right: -8px;
 	width: 635px;
 	height: 635px;
 	background: #d4d5d7;
-	border-radius: 100%;
+	border-radius: 80%;
 	overflow: hidden;
-	border: 8px solid #d5d5d7;
 	position: relative;
 	bottom: 121px;
 	right: 38px;
@@ -73,10 +72,9 @@ margin-right: -8px;
 	background: #d4d5d7;
 	border-radius: 100%;
 	overflow: hidden;
-	border: 8px solid #d5d5d7;
 	position: absolute;
 	top: 752px;
-	margin-left: 252px;
+	margin-left: -750px;
 	z-index: 1;
 }
 .left-img-box3 {
@@ -85,10 +83,9 @@ margin-right: -8px;
 	background: #d4d5d7;
 	border-radius: 100%;
 	overflow: hidden;
-	border: 8px solid #d5d5d7;
 	position: absolute;
 	top: 748px;
-	margin-left: 23px;
+	margin-left: -400px;
 	z-index: 2;
 }
 .left-img-box1 img, .left-img-box2 img, .left-img-box3 img {
