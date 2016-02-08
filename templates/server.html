@@ -1,7 +1,12 @@
-<HTML>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+
 <HEAD>
     <TITLE>Room of the Future</TITLE>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
@@ -13,6 +18,7 @@
             background:#3f8cb3 !important;
         }
     </style>
+    <link rel="stylesheet" href="static/css/style.css" type="text/css" />
     <script>
         var TIMEOUT = 5; // in seconds
         var code_count = 0;
@@ -39,9 +45,9 @@
         };
 
         function load_images() {
-            var imgsrc_001 = 'static/file_001.png'
-            var imgsrc_002 = 'static/file_002.png'
-            var imgsrc_003 = 'static/file_003.png'
+            var imgsrc_001 = 'static/images/file_001.png'
+            var imgsrc_002 = 'static/images/file_002.png'
+            var imgsrc_003 = 'static/images/file_003.png'
             $("#image_001").attr('src', imgsrc_001);
             $("#image_002").attr('src', imgsrc_002);
             $("#image_003").attr('src', imgsrc_003);
@@ -59,14 +65,14 @@
                         load_images();
                         // $("#show").html(result);
                         /*
-                        $("#name").html(result['values']['name']);
-                        $("#goals_001").html(result['values']['goals_001']);
-                        $("#goals_002").html(result['values']['goals_002']);
-                        $("#goals_003").html(result['values']['goals_003']);
-                        $("#aboutme_001").html(result['values']['aboutme_001']);
-                        $("#aboutme_002").html(result['values']['aboutme_002']);
-                        $("#aboutme_003").html(result['values']['aboutme_003']);
-                        */
+                         $("#name").html(result['values']['name']);
+                         $("#goals_001").html(result['values']['goals_001']);
+                         $("#goals_002").html(result['values']['goals_002']);
+                         $("#goals_003").html(result['values']['goals_003']);
+                         $("#aboutme_001").html(result['values']['aboutme_001']);
+                         $("#aboutme_002").html(result['values']['aboutme_002']);
+                         $("#aboutme_003").html(result['values']['aboutme_003']);
+                         */
                     },
                     complete:poll()
                 });
@@ -74,48 +80,78 @@
         })();
     </script>
 </HEAD>
-<BODY>
-AboutMe
-<br>
-<br>
-<div id="name" align="left">loading...</div>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-4">
-            <img class="img-circle" id="image_001" src="static/file_001.png" alt='' width="100" height="100">
-        </div>
-        <div class="col-sm-4">
-            <img class="img-circle" id="image_002" src="static/file_002.png" alt='' width="150" height="150">
-        </div>
-        <div class="col-sm-4">
-            <img class="img-circle" id="image_003" src="static/file_003.png" alt='' width="100" height="100">
-        </div>
+<body>
+<!--container-->
+<div class="container"> 
+  <!--header-->
+  <div class="header">
+    <h5>Please call me:</h5>
+    <h1>Jane</h1>
+  </div>
+  <!--body-content-->
+  <div class="body-content"> 
+    <!--content-left-->
+    <div class="content-left">
+      <div class="left-img-box1"><img src="static/images/image_c.png"></div>
+      <div class="left-img-box2"><img src="static/images/image_b.png"></div>
+      <div class="left-img-box3"><img src="static/images/image_a.png"></div>
     </div>
+    <!--content-left-->
+    <div class="content-medil">
+      <h5>About me:</h5>
+      <ul>
+        <li id="about-me0"> I have 4 kids: Jon, Sam,<br/>
+          Tommy, and Lila.</li>
+        <li id="about-me1"> I am a preschool teacher.</li>
+        <li id="about-me2"> I love going to the beach.</li>
+      </ul>
+      <div class="blank-space"></div>
+      <h5>My goals:</h5>
+      <ul>
+        <li id="my-goals0"> Get home to my family!</li>
+        <li id="my-goals1"> Have less pain so I can focus.</li>
+        <li id="my-goals2"> Someday, I would like to run<br/>
+          my own school.</li>
+      </ul>
+    </div>
+    <!--content-right-->
+    <div class="content-right">
+      <h5 class="right-content-title">Today, I feel:</h5>
+      <div class="right-img-box">
+        <div class="right-number">10<br/>
+          9</div>
+        <div class="right-img"><img src="static/images/icon1.png" width="152" height="149"></div>
+      </div>
+      <div class="right-img-box">
+        <div class="right-number">8<br/>
+          7</div>
+        <div class="right-img"><img src="static/images/icon2.png" width="152" height="149"></div>
+      </div>
+      <div class="right-img-box">
+        <div class="right-number">6<br/>
+          5</div>
+        <div class="right-img"><img src="static/images/icon3.png" width="152" height="149"></div>
+      </div>
+      <div class="right-img-box">
+        <div class="right-number">4<br/>
+          3</div>
+        <div class="right-img"><img src="static/images/icon4.png" width="152" height="149"></div>
+      </div>
+      <div class="right-img-box">
+        <div class="right-number">2<br/>
+          1</div>
+        <div class="right-img"><img src="static/images/icon5.png" width="152" height="149"></div>
+      </div>
+      <div class="right-img-box">
+        <div class="right-number">0<br/>
+        </div>
+        <div class="right-img"><img src="static/images/icon6.png" width="152" height="149"></div>
+      </div>
+    </div>
+  </div>
+  <!--foote-->
+  <div class="footer"> <img src="static/images/footer-logo.png" width="581" height="102"> </div>
 </div>
-
-<table class="table">
-    <tr>
-        <td id="left-side">
-            <ul>
-                <li id="goals_001" align="left"></li>
-                <li id="goals_002" align="left"></li>
-                <li id="goals_003" align="left"></li>
-            </ul>
-        </td>
-        <td id="right-side">
-            <ul>
-                <li id="aboutme_001" align="left"></li>
-                <li id="aboutme_002" align="left"></li>
-                <li id="aboutme_003" align="left"></li>
-            </ul>
-
-        </td>
-    </tr>
-</table>
-
-
-<h2><div id="auth_code" align="center"></div></h2>
-
-</BODY>
-</HTML>
+</body>
+</html>
