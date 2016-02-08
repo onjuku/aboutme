@@ -9,23 +9,76 @@
 # We'll render HTML templates and access data sent by GET
 # using the request object from flask. jsonigy is required
 # to send JSON as a response of a request
-from flask import Flask, make_response, render_template, request, jsonify, redirect, url_for, send_from_directory
+from flask import Flask, make_response, render_template, request, jsonify, redirect, url_for, send_from_directory, g
 from functools import wraps, update_wrapper
 from datetime import datetime
 from werkzeug import secure_filename
-import os
+import os, os.path
 from time import sleep
 import json
 import random
+import sqlite3
+from contextlib import closing
 
 UPLOAD_FOLDER = 'static'
 ALLOWED_EXTENSIONS = set(['png'])
 DATAFILE = 'vals.json'
+DATABASE = 'json.db'
+DBSCHEMA = 'schema.sql'
 
 # Initialize the Flask application
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.debug = True
+
+# begin DB related stuff
+def connect_db():
+    """
+    Returns connection to sqlite DB.
+    """
+    return sqlite3.connect(DATABASE)
+
+def init_db():
+    """
+    Sqlite DB initialization.
+    """
+    with closing(connect_db()) as db:
+        # create schema
+        with open(DBSCHEMA, mode='r') as f:
+            db.cursor().executescript(f.read())
+        db.commit()
+        # fill table with data
+        if os.path.exists(DATAFILE):
+            with open(DATAFILE, mode='r') as f:
+                db.execute('insert into json (json) values (?)', 
+                    (f.read(), ))
+            db.commit()
+
+def read_vals():
+    """
+    Returns json from DB.
+    """
+    cur = g.db.execute('select json from json')
+    data = [row[0] for row in cur.fetchall()]
+    return data[0] if len(data) else None
+
+def write_vals(obj):
+    """
+    Writes json to DB.
+    """
+    cur = g.db.execute('update json set json=?', (obj, ))
+    g.db.commit()
+
+@app.before_request
+def before_request():
+    g.db = connect_db()
+
+@app.teardown_request
+def teardown_request(exception):
+    db = getattr(g, 'db', None)
+    if db is not None:
+        db.close()
+# end DB related stuff
 
 def nocache(view):
     @wraps(view)
@@ -51,8 +104,7 @@ def vals():
 @app.route('/patient_info')
 def patient_info():
     try:
-        with open(DATAFILE, "r") as f:
-            vals = f.read()
+        vals = read_vals()
     except:
         import pdb; pdb.set_trace()
 
@@ -72,16 +124,13 @@ def update_code(auth_code):
     """
     modify datastore, return code
     """
-    with open(DATAFILE, "r") as f:
-        vals = json.loads(f.read())
+    vals = json.loads(read_vals())
     vals['values']['auth_code'] = auth_code
-    with open(DATAFILE, "w") as f:
-        f.write(json.dumps(vals))
+    write_vals(json.dumps(vals))
     return auth_code
 
 def read_code():
-    with open(DATAFILE, "r") as f:
-        vals = json.loads(f.read())
+    vals = json.loads(read_vals())
     return vals['values']['auth_code']
 
 @app.route('/clear_code')
@@ -118,8 +167,7 @@ def update_server():
                    'auth_code': read_code(),
                    }}
     try:
-        with open(DATAFILE, "w") as f:
-            f.write(json.dumps(values))
+        write_vals(json.dumps(values))
     except:
         import pdb; pdb.set_trace()
 
@@ -182,6 +230,8 @@ def uploaded_file(filename):
                                filename)
 
 if __name__ == '__main__':
+    if not os.path.exists(DATABASE):
+        init_db()
     app.run(
         host="0.0.0.0",
     )
