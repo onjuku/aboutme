@@ -1,85 +1,11 @@
 <!doctype html>
-<html>
+<html data-ember-extension="1"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <head>
-<meta charset="utf-8">
-</head>
-
-<HEAD>
+    <meta charset="utf-8">
     <TITLE>Room of the Future</TITLE>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script type="text/javascript"
-            src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-
-    <style>
-        body {
-            background:#3f8cb3 !important;
-        }
-    </style>
     <link rel="stylesheet" href="static/css/style.css" type="text/css" />
-    <script>
-        var TIMEOUT = 5; // in seconds
-        var code_count = 0;
-        function auth_code_timeout() {
-            if (code_count > TIMEOUT) {
-                $.get('/clear_code');
-                code_count = 0
-            }
-        }
-        function load_vals(result) {
-            $("#name").html(result['values']['name']);
-            $("#goals_001").html(result['values']['goals_001']);
-            $("#goals_002").html(result['values']['goals_002']);
-            $("#goals_003").html(result['values']['goals_003']);
-            $("#aboutme_001").html(result['values']['aboutme_001']);
-            $("#aboutme_002").html(result['values']['aboutme_002']);
-            $("#aboutme_003").html(result['values']['aboutme_003']);
-            $("#auth_code").html(result['values']['auth_code']);
-            if (result['values']['auth_code'] > 0) {
-                code_count += 1
-            } else {
-                code_count = 0
-            }
-        };
-
-        function load_images() {
-            var imgsrc_001 = 'static/images/file_001.png'
-            var imgsrc_002 = 'static/images/file_002.png'
-            var imgsrc_003 = 'static/images/file_003.png'
-            $("#image_001").attr('src', imgsrc_001);
-            $("#image_002").attr('src', imgsrc_002);
-            $("#image_003").attr('src', imgsrc_003);
-
-        };
-
-        (function poll() {
-            setTimeout(function() {
-                $.ajax({
-                    url : "/patient_info",
-                    dataType : 'json',
-                    success : function(result){
-                        auth_code_timeout();
-                        load_vals(result);
-                        load_images();
-                        // $("#show").html(result);
-                        /*
-                         $("#name").html(result['values']['name']);
-                         $("#goals_001").html(result['values']['goals_001']);
-                         $("#goals_002").html(result['values']['goals_002']);
-                         $("#goals_003").html(result['values']['goals_003']);
-                         $("#aboutme_001").html(result['values']['aboutme_001']);
-                         $("#aboutme_002").html(result['values']['aboutme_002']);
-                         $("#aboutme_003").html(result['values']['aboutme_003']);
-                         */
-                    },
-                    complete:poll()
-                });
-            }, 2000);
-        })();
-    </script>
-</HEAD>
+</head>
 
 <body>
 <!--container-->
@@ -93,9 +19,9 @@
   <div class="body-content"> 
     <!--content-left-->
     <div class="content-left">
-      <div class="left-img-box1"><img src="static/images/image_c.png"></div>
-      <div class="left-img-box2"><img src="static/images/image_b.png"></div>
-      <div class="left-img-box3"><img src="static/images/image_a.png"></div>
+      <div> <img class="left-img-box1" src="static/images/image_c.png"></div>
+      <div> <img class="left-img-box2" src="static/images/image_b.png"></div>
+      <div> <img class="left-img-box3" src="static/images/image_a.png"></div>
     </div>
     <!--content-left-->
     <div class="content-medil">
@@ -117,41 +43,41 @@
     </div>
     <!--content-right-->
     <div class="content-right">
-      <h5 class="right-content-title">Today, I feel:</h5>
+      <h5 class="right-content-title">Today, I feel: <span class="right-message">Happy </span></h5>
       <div class="right-img-box">
-        <div class="right-number">10<br/>
+        <div class="right-number">10<br>
           9</div>
-        <div class="right-img"><img src="static/images/icon1.png" width="152" height="149"></div>
+        <div><img class="right-img1" src="static/images/icon1.png" alt=""></div>
       </div>
       <div class="right-img-box">
-        <div class="right-number">8<br/>
+        <div class="right-number">8<br>
           7</div>
-        <div class="right-img"><img src="static/images/icon2.png" width="152" height="149"></div>
+        <div><img class="right-img2" src="static/images/icon2.png" alt=""></div>
       </div>
       <div class="right-img-box">
-        <div class="right-number">6<br/>
+        <div class="right-number">6<br>
           5</div>
-        <div class="right-img"><img src="static/images/icon3.png" width="152" height="149"></div>
+        <div><img class="right-img3" src="static/images/icon3.png" alt=""></div>
       </div>
       <div class="right-img-box">
-        <div class="right-number">4<br/>
+        <div class="right-number">4<br>
           3</div>
-        <div class="right-img"><img src="static/images/icon4.png" width="152" height="149"></div>
+        <div><img class="right-img4" src="static/images/icon4.png" alt=""></divM>
       </div>
       <div class="right-img-box">
         <div class="right-number">2<br/>
           1</div>
-        <div class="right-img"><img src="static/images/icon5.png" width="152" height="149"></div>
+        <div><img class="right-img5" src="static/images/icon5.png" alt=""></div>
       </div>
       <div class="right-img-box">
         <div class="right-number">0<br/>
         </div>
-        <div class="right-img"><img src="static/images/icon6.png" width="152" height="149"></div>
+        <div><img class="right-img6" src="static/images/icon6.png" alt=""></div>
       </div>
     </div>
   </div>
   <!--foote-->
-  <div class="footer"> <img src="static/images/footer-logo.png" width="581" height="102"> </div>
+  <div class="footer"> <img class="footer-logo" src="static/images/footer-logo.png" width="581" height="102"> </div>
 </div>
 </body>
 </html>
